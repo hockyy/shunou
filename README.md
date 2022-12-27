@@ -30,9 +30,6 @@ This repo is heavily referenced by:
 
 - Install `mecab` via brew
 
-- Install `pyenv` via brew
-- Install the python 3.9 through pyenv, the developer uses 3.9.16 in MacOS M1 running Ventura
-
 ## Manual Dictionary for UniDic 
 
 To enable mecab-unidic dictionary, add to`$(brew --prefix)/etc/mecabrc` the below:
