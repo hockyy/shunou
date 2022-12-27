@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/hockyy/shunou-js/issues"
   },
-  "homepage": "https://github.com/hockyy/shunou-js#readme"
+  "homepage": "https://github.com/hockyy/shunou-js#readme",
+  "dependencies": {
+    "@enjoyjs/node-mecab": "^0.4.0"
+  }
 }
