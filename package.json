@@ -1,5 +1,5 @@
 {
-  "name": "@hockyy/shunou",
+  "name": "shunou",
   "version": "0.0.4",
   "description": "",
   "main": "dist/index.js",
