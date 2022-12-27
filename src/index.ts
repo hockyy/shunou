@@ -1,4 +1,4 @@
-import {analyze, MecabOptions} from "@enjoyjs/node-mecab";
+import {analyze, analyzeSync, MecabOptions} from "@enjoyjs/node-mecab";
 import * as wanakana from 'wanakana';
 
 
@@ -29,8 +29,8 @@ function splitOkurigana(text: string, hiragana: string) {
     return stored[0]
 }
 
-async function getFurigana(text: string, options?: Readonly<MecabOptions>) {
-    const sentences = await analyze(text, options)
+function getFurigana(text: string, options?: Readonly<MecabOptions>) {
+    const sentences = analyzeSync(text, options)
     const pairs = [];
     for (const word of sentences.split('\n')) {
         if (word === 'EOS') continue;
