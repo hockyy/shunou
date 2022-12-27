@@ -17,7 +17,122 @@ for (const tmp of text) {
 ```
 
 ```json
-[{"origin":"アニメ","hiragana":"あにめ","basicForm":"アニメ-animation","pos":"名詞-普通名詞-一般","separation":[{"bottom":"ア","top":null},{"bottom":"ニ","top":null},{"bottom":"メ","top":null}]},{"origin":"を","hiragana":"お","basicForm":"を","pos":"助詞-格助詞","separation":[{"bottom":"を","top":null}]},{"origin":"見","hiragana":"み","basicForm":"見る","pos":"動詞-非自立可能","separation":[{"bottom":"見","top":"み"}]},{"origin":"て","hiragana":"て","basicForm":"て","pos":"助詞-接続助詞","separation":[{"bottom":"て","top":null}]},{"origin":"い","hiragana":"い","basicForm":"居る","pos":"動詞-非自立可能","separation":[{"bottom":"い","top":null}]},{"origin":"ます","hiragana":"ます","basicForm":"ます","pos":"助動詞","separation":[{"bottom":"ま","top":null},{"bottom":"す","top":null}]}]
+[
+  {
+    "origin": "アニメ",
+    "hiragana": "あにめ",
+    "basicForm": "アニメ-animation",
+    "pos": "名詞-普通名詞-一般",
+    "separation": [
+      {
+        "bottom": "ア",
+        "top": null
+      },
+      {
+        "bottom": "ニ",
+        "top": null
+      },
+      {
+        "bottom": "メ",
+        "top": null
+      }
+    ]
+  },
+  {
+    "origin": "を",
+    "hiragana": "お",
+    "basicForm": "を",
+    "pos": "助詞-格助詞",
+    "separation": [
+      {
+        "bottom": "を",
+        "top": null
+      }
+    ]
+  },
+  {
+    "origin": "見",
+    "hiragana": "み",
+    "basicForm": "見る",
+    "pos": "動詞-非自立可能",
+    "separation": [
+      {
+        "bottom": "見",
+        "top": "み"
+      }
+    ]
+  },
+  {
+    "origin": "て",
+    "hiragana": "て",
+    "basicForm": "て",
+    "pos": "助詞-接続助詞",
+    "separation": [
+      {
+        "bottom": "て",
+        "top": null
+      }
+    ]
+  },
+  {
+    "origin": "い",
+    "hiragana": "い",
+    "basicForm": "居る",
+    "pos": "動詞-非自立可能",
+    "separation": [
+      {
+        "bottom": "い",
+        "top": null
+      }
+    ]
+  },
+  {
+    "origin": "ます",
+    "hiragana": "ます",
+    "basicForm": "ます",
+    "pos": "助動詞",
+    "separation": [
+      {
+        "bottom": "ま",
+        "top": null
+      },
+      {
+        "bottom": "す",
+        "top": null
+      }
+    ]
+  }
+]
+```
+
+### Other MeCab Options
+
+```js
+export type MecabOptions = {
+	rcfile?: string;
+	dicdir?: string;
+	userdic?: string;
+	latticeLevel?: number;
+	dictionaryInfo?: boolean;
+	outputFormatType?: OutputFormatType;
+	allMorphs?: boolean;
+	nbest?: number;
+	partial?: boolean;
+	marginal?: boolean;
+	maxGroupingSize?: number;
+	nodeFormat?: string;
+	unkFormat?: string;
+	bosFormat?: string;
+	eosFormat?: string;
+	eonFormat?: string;
+	unkFeature?: string;
+	inputBufferSize?: number;
+	dumpConfig?: boolean;
+	allocateSentence?: boolean;
+	theta?: number;
+	costFactor?: number;
+	output?: string;
+};
 ```
 
 Shunou uses the MeCab tokenizer, which is a binding for the CLI of MeCab. It should be available for EVERY OS!
