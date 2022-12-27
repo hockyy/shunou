@@ -10,14 +10,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/hockyy/shunou-js.git"
+    "url": "git+https://github.com/hockyy/shunou.git"
   },
   "author": "Hocky Yudhiono",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/hockyy/shunou-js/issues"
+    "url": "https://github.com/hockyy/shunou/issues"
   },
-  "homepage": "https://github.com/hockyy/shunou-js#readme",
+  "homepage": "https://github.com/hockyy/shunou#readme",
   "dependencies": {
     "@enjoyjs/node-mecab": "^0.4.0",
     "wanakana": "^5.0.2"
