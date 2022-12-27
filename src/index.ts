@@ -19,10 +19,12 @@ function splitOkurigana(text: string, hiragana: string) {
             } else break;
         }
     }
-    stored[0].push({
-        bottom: text.substring(textPointer[0], textPointer[1] + 1),
-        top: text.substring(kanaPointer[0], kanaPointer[1] + 1)
-    })
+    if (textPointer[0] <= textPointer[1]) {
+        stored[0].push({
+            bottom: text.substring(textPointer[0], textPointer[1] + 1),
+            top: hiragana.substring(kanaPointer[0], kanaPointer[1] + 1)
+        })
+    }
     stored[0].concat(stored[1].reverse())
     return stored[0]
 }
@@ -32,19 +34,21 @@ async function getFurigana(text: string, options?: Readonly<MecabOptions>) {
     const pairs = [];
     for (const word of sentences.split('\n')) {
         if (word === 'EOS') continue;
-        // console.log(word)
         const splittedWord = word.split('\t');
         const origin = splittedWord[0];
         const hiragana = wanakana.isKana(splittedWord[1]) ? wanakana.toHiragana(splittedWord[1], {passRomaji: true}) : splittedWord[1];
-        const splitted = [];
-
+        const basicForm = splittedWord[3]
+        const pos = splittedWord[4]
         pairs.push({
-            origin, hiragana
+            origin, hiragana, basicForm, pos
         })
     }
     const ret = []
     for (const wordPair of pairs) {
-        ret.push(splitOkurigana(wordPair.origin, wordPair.hiragana));
+        ret.push({
+            ...wordPair,
+            separation: splitOkurigana(wordPair.origin, wordPair.hiragana)
+        });
     }
     return ret
 }
