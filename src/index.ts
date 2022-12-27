@@ -1,4 +1,4 @@
-import {analyze, analyzeSync, MecabOptions} from "@enjoyjs/node-mecab";
+import {analyzeSync, MecabOptions} from "@enjoyjs/node-mecab";
 import * as wanakana from 'wanakana';
 
 
