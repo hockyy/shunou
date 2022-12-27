@@ -2,9 +2,11 @@
   "name": "shunou",
   "version": "0.0.1",
   "description": "",
-  "main": "index.js",
+  "main": "index.ts",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "npx tsc",
+    "start": "ts-node --esm src/index.ts"
   },
   "repository": {
     "type": "git",
@@ -17,6 +19,11 @@
   },
   "homepage": "https://github.com/hockyy/shunou-js#readme",
   "dependencies": {
-    "@enjoyjs/node-mecab": "^0.4.0"
+    "@enjoyjs/node-mecab": "^0.4.0",
+    "wanakana": "^5.0.2"
+  },
+  "devDependencies": {
+    "@types/wanakana": "^4.0.3",
+    "typescript": "^4.9.4"
   }
 }
