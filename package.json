@@ -1,6 +1,6 @@
 {
-  "name": "@hocky/shunou",
-  "version": "0.0.3",
+  "name": "@hockyy/shunou",
+  "version": "0.0.4",
   "description": "",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
