@@ -30,7 +30,7 @@ This repo is heavily referenced by:
 
 - Install `mecab` via brew
 
-## Manual Dictionary for UniDic 
+### Using UniDic Dictionary
 
 To enable mecab-unidic dictionary, add to`$(brew --prefix)/etc/mecabrc` the below:
 
@@ -61,7 +61,7 @@ dicdir = /opt/homebrew/lib/mecab/dic/unidic
   - The important files are `char.bin`, `dicrc`, `matrix.bin`, `sys.dic`, `unk.dic`.
 - Put it in a directory, and set the dicdir based on the dictionary directory.
 
-### Brew Based Dictionary
+### Other Brew Based Dictionary
 
 - https://formulae.brew.sh/formula/mecab-unidic
 
