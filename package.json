@@ -7,7 +7,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "tsc",
-    "package": "tsc && (git add .) && (git commit -m 'New Package') && npm publish"
+    "package": "npx tsc && (git add .) && (git commit -m 'New Package') && npm publish"
   },
   "repository": {
     "type": "git",
