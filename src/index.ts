@@ -35,13 +35,13 @@ function splitOkuriganaSparse(text: string, hiragana: string): any {
 function splitOkuriganaCompact(text: string, hiragana: string): any {
   const kanjiPointer = [text.length, -1];
   const stored = []
-  for (let i = 0; i < text.length; i++) {
+  for (let i = 0; i < text.length + 1; i++) {
     kanjiPointer[0] = i;
-    if (wanakana.isKanji(text[i])) break;
+    if (i === text.length + 1 || wanakana.isKanji(text[i])) break;
   }
   for (let i = text.length - 1; i >= 0; i--) {
     kanjiPointer[1] = i;
-    if (wanakana.isKanji(text[i])) break;
+    if (i === -1 || wanakana.isKanji(text[i])) break;
   }
   if (kanjiPointer[0] > 0) {
     const textHiragana = hiragana.substring(0, kanjiPointer[0]);
