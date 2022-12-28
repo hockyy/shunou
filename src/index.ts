@@ -1,37 +1,6 @@
 import {analyzeSync, MecabOptions} from "@enjoyjs/node-mecab";
 import * as wanakana from 'wanakana';
-import {isKana, isKanji} from "wanakana";
-
-function splitOkuriganaSparse(text: string, hiragana: string): any {
-  const textPointer = [0, text.length - 1];
-  const kanaPointer = [0, hiragana.length - 1];
-  const direction = [1, -1];
-  const stored = [[], []];
-  for (let i = 0; i <= 1; i++) {
-    while (textPointer[0] <= textPointer[1]) {
-      if (!wanakana.isKanji(text[textPointer[i]])) {
-        stored[i].push({
-          main: text[textPointer[i]],
-          hiragana: wanakana.toHiragana(text[textPointer[i]]),
-          romaji: wanakana.toRomaji(text[textPointer[i]]),
-          isKana: true
-        })
-        textPointer[i] += direction[i];
-        kanaPointer[i] += direction[i];
-      } else break;
-    }
-  }
-  if (textPointer[0] <= textPointer[1]) {
-    stored[0].push({
-      main: text.substring(textPointer[0], textPointer[1] + 1),
-      hiragana: hiragana.substring(kanaPointer[0], kanaPointer[1] + 1),
-      romaji: wanakana.toRomaji(hiragana.substring(kanaPointer[0], kanaPointer[1] + 1)),
-      isKana: false
-    })
-  }
-  stored[0].concat(stored[1].reverse())
-  return stored[0]
-}
+import {isKana, isKanji, isMixed} from "wanakana";
 
 function splitOkuriganaCompact(text: string, hiragana: string): any {
   const kanjiPointer = [text.length, -1];
@@ -53,6 +22,7 @@ function splitOkuriganaCompact(text: string, hiragana: string): any {
       romaji: wanakana.toRomaji(textHiragana),
       isKana: isKana(textMain),
       isKanji: isKanji(textMain),
+      isMixed: isMixed(textMain)
     })
   }
   if (kanjiPointer[0] <= kanjiPointer[1]) {
@@ -65,6 +35,7 @@ function splitOkuriganaCompact(text: string, hiragana: string): any {
       romaji: wanakana.toRomaji(textHiragana),
       isKana: isKana(textMain),
       isKanji: isKanji(textMain),
+      isMixed: isMixed(textMain)
     })
   }
   if (kanjiPointer[0] <= kanjiPointer[1] && kanjiPointer[1] + 1 !== text.length) {
@@ -77,6 +48,7 @@ function splitOkuriganaCompact(text: string, hiragana: string): any {
       romaji: wanakana.toRomaji(textHiragana),
       isKana: isKana(textMain),
       isKanji: isKanji(textMain),
+      isMixed: isMixed(textMain)
     })
   }
   return stored;
