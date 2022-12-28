@@ -2,7 +2,7 @@ import {analyzeSync, MecabOptions} from "@enjoyjs/node-mecab";
 import * as wanakana from 'wanakana';
 
 
-function splitOkurigana(text: string, hiragana: string) {
+function splitOkurigana(text: string, hiragana: string) : any{
     const textPointer = [0, text.length - 1];
     const kanaPointer = [0, hiragana.length - 1];
     const direction = [1, -1];
@@ -52,5 +52,8 @@ function getFurigana(text: string, options?: Readonly<MecabOptions>) {
     }
     return ret
 }
+function isMixedJapanese(text:string) : boolean{
+    return wanakana.isMixed(text)
+}
 
-export {getFurigana};
+export {getFurigana, isMixedJapanese};
