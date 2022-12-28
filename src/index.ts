@@ -1,5 +1,6 @@
 import {analyzeSync, MecabOptions} from "@enjoyjs/node-mecab";
 import * as wanakana from 'wanakana';
+import {isKana, isKanji} from "wanakana";
 
 function splitOkuriganaSparse(text: string, hiragana: string): any {
   const textPointer = [0, text.length - 1];
@@ -45,31 +46,37 @@ function splitOkuriganaCompact(text: string, hiragana: string): any {
   }
   if (kanjiPointer[0] > 0) {
     const textHiragana = hiragana.substring(0, kanjiPointer[0]);
+    const textMain = text.substring(0, kanjiPointer[0])
     stored.push({
-      main: text.substring(0, kanjiPointer[0]),
+      main: textMain,
       hiragana: textHiragana,
       romaji: wanakana.toRomaji(textHiragana),
-      isKana: true
+      isKana: isKana(textMain),
+      isKanji: isKanji(textMain),
     })
   }
   if (kanjiPointer[0] <= kanjiPointer[1]) {
     const spentBack = text.length - kanjiPointer[1];
+    const textMain = text.substring(kanjiPointer[0], kanjiPointer[1] + 1)
     const textHiragana = hiragana.substring(kanjiPointer[0], hiragana.length - spentBack + 1)
     stored.push({
-      main: text.substring(kanjiPointer[0], kanjiPointer[1] + 1),
+      main: textMain,
       hiragana: textHiragana,
       romaji: wanakana.toRomaji(textHiragana),
-      isKana: false
+      isKana: isKana(textMain),
+      isKanji: isKanji(textMain),
     })
   }
   if (kanjiPointer[0] <= kanjiPointer[1] && kanjiPointer[1] + 1 !== text.length) {
     const spentBack = text.length - kanjiPointer[1];
     const textHiragana = hiragana.substring(hiragana.length - spentBack + 1, hiragana.length)
+    const textMain = text.substring(kanjiPointer[1] + 1, text.length)
     stored.push({
-      main: text.substring(kanjiPointer[1] + 1, text.length),
+      main: textMain,
       hiragana: textHiragana,
       romaji: wanakana.toRomaji(textHiragana),
-      isKana: true
+      isKana: isKana(textMain),
+      isKanji: isKanji(textMain),
     })
   }
   return stored;
