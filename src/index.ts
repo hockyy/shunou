@@ -12,8 +12,8 @@ function splitOkurigana(text: string, hiragana: string): any {
       if (!wanakana.isKanji(text[textPointer[i]])) {
         stored[i].push({
           main: text[textPointer[i]],
-          over: null,
-          under: wanakana.toRomaji(text[textPointer[i]])
+          hiragana: null,
+          romaji: wanakana.toRomaji(text[textPointer[i]])
         })
         textPointer[i] += direction[i];
         kanaPointer[i] += direction[i];
@@ -23,8 +23,8 @@ function splitOkurigana(text: string, hiragana: string): any {
   if (textPointer[0] <= textPointer[1]) {
     stored[0].push({
       main: text.substring(textPointer[0], textPointer[1] + 1),
-      over: hiragana.substring(kanaPointer[0], kanaPointer[1] + 1),
-      under: wanakana.toRomaji(hiragana.substring(kanaPointer[0], kanaPointer[1] + 1))
+      hiragana: hiragana.substring(kanaPointer[0], kanaPointer[1] + 1),
+      romaji: wanakana.toRomaji(hiragana.substring(kanaPointer[0], kanaPointer[1] + 1))
     })
   }
   stored[0].concat(stored[1].reverse())
