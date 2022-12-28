@@ -13,7 +13,7 @@ function splitOkurigana(text: string, hiragana: string): any {
         stored[i].push({
           main: text[textPointer[i]],
           over: null,
-          under: wanakana.toHiragana(text[textPointer[i]])
+          under: wanakana.toRomaji(text[textPointer[i]])
         })
         textPointer[i] += direction[i];
         kanaPointer[i] += direction[i];
@@ -24,7 +24,7 @@ function splitOkurigana(text: string, hiragana: string): any {
     stored[0].push({
       main: text.substring(textPointer[0], textPointer[1] + 1),
       over: hiragana.substring(kanaPointer[0], kanaPointer[1] + 1),
-      under: wanakana.toHiragana(text.substring(textPointer[0], textPointer[1] + 1))
+      under: wanakana.toRomaji(hiragana.substring(kanaPointer[0], kanaPointer[1] + 1))
     })
   }
   stored[0].concat(stored[1].reverse())
