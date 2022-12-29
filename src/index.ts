@@ -88,4 +88,4 @@ function setMecabCommand (mecab: string) {
   mecabCommand = mecab
 }
 
-export {getFurigana, isMixedJapanese};
+export {getFurigana, isMixedJapanese, setMecabCommand};
