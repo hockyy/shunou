@@ -108,4 +108,4 @@ function isMixedJapanese(text: string): boolean {
   return wanakana.isMixed(text)
 }
 
-export {getFurigana, isMixedJapanese};
+export {getFurigana, isMixedJapanese, getFuriganaNew};
