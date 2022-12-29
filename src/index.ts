@@ -2,8 +2,6 @@ import * as wanakana from 'wanakana';
 import {isKana, isKanji, isMixed} from 'wanakana';
 import {spawnSync} from "child_process";
 
-let mecabCommand = "mecab"
-
 function splitOkuriganaCompact(text: string, hiragana: string): any {
   const kanjiPointer = [text.length, -1];
   const stored = []
@@ -56,7 +54,7 @@ function splitOkuriganaCompact(text: string, hiragana: string): any {
   return stored;
 }
 
-function getFurigana(text: string) {
+function getFurigana(text: string, mecabCommand: string = 'mecab') {
   const sentences = spawnSync(mecabCommand, {input: text, shell: true}).stdout.toString();
   const pairs = [];
   for (const word of sentences.split('\n')) {
@@ -84,8 +82,4 @@ function isMixedJapanese(text: string): boolean {
   return wanakana.isMixed(text)
 }
 
-function setMecabCommand (mecab: string) {
-  mecabCommand = mecab
-}
-
-export {getFurigana, isMixedJapanese, setMecabCommand};
+export {getFurigana, isMixedJapanese};
