@@ -1,5 +1,5 @@
 {
-  "name": "shunou-js",
+  "name": "shunou",
   "version": "0.0.17",
   "description": "",
   "main": "dist/index.js",
@@ -7,7 +7,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "tsc",
-    "package": "npx tsc; (git add .); (git commit -m 'New Package'); npm publish"
+    "package": "npx tsc; (git add .); (git commit -m 'New Package'); npm i; npm publish"
   },
   "repository": {
     "type": "git",
