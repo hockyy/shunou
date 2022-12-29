@@ -1,13 +1,13 @@
 {
   "name": "shunou",
-  "version": "0.0.25",
+  "version": "0.0.26",
   "description": "",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "tsc",
-    "package": "npx tsc; (git add .); (git commit -m 'New Package'); npm i; npm publish"
+    "package": "npm i; npx tsc; (git add .); (git commit -m 'New Package'); npm publish"
   },
   "repository": {
     "type": "git",
