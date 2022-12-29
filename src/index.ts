@@ -1,6 +1,7 @@
 import {analyzeSync, MecabOptions} from "@enjoyjs/node-mecab";
 import * as wanakana from 'wanakana';
 import {isKana, isKanji, isMixed} from "wanakana";
+import {spawn, spawnSync} from "child_process";
 
 function splitOkuriganaCompact(text: string, hiragana: string): any {
   const kanjiPointer = [text.length, -1];
@@ -56,6 +57,31 @@ function splitOkuriganaCompact(text: string, hiragana: string): any {
 
 function getFurigana(text: string, options?: Readonly<MecabOptions>) {
   const sentences = analyzeSync(text, options)
+  const pairs = [];
+  for (const word of sentences.split('\n')) {
+    if (word === 'EOS') continue;
+    const splittedWord = word.split('\t');
+    const origin = splittedWord[0];
+    const hiragana = wanakana.isKana(splittedWord[1]) ? wanakana.toHiragana(splittedWord[1], {passRomaji: true}) : splittedWord[1];
+    const basicForm = splittedWord[3]
+    const pos = splittedWord[4]
+    pairs.push({
+      origin, hiragana, basicForm, pos
+    })
+  }
+  const ret = []
+  for (const wordPair of pairs) {
+    ret.push({
+      ...wordPair,
+      separation: splitOkuriganaCompact(wordPair.origin, wordPair.hiragana)
+    });
+  }
+  return ret
+}
+
+
+function getFuriganaNew(text: string, options?: Readonly<MecabOptions>) {
+  const sentences = spawnSync( "mecab", { input : 'one two three' }).stdout.toString();
   const pairs = [];
   for (const word of sentences.split('\n')) {
     if (word === 'EOS') continue;
