@@ -74,12 +74,18 @@ const runAndSplit = (text: string, mecabCommand: string, outputFormat: string) =
 const notOKParseResponse = {ok: false, pairs: []};
 const parseChamame = (text: string, mecabCommand: string) => {
   const {ok, splittedSentences} = runAndSplit(text, mecabCommand, 'chamame');
-  if (splittedSentences.length === 0 || !ok || splittedSentences[0][0] !== 'B') {
+  if (splittedSentences.length === 0 || !ok) {
     return notOKParseResponse
   }
   const pairs = []
-  splittedSentences[0] = splittedSentences[0].substring(1)
-  for (const word of splittedSentences) {
+  for (const tmpWord of splittedSentences) {
+    let word = tmpWord;
+    if (word[0] === 'B') {
+      word = word.substring(1)
+      pairs.push({
+        origin: '\n', hiragana: '\n', basicForm: '\n', pos: ''
+      })
+    }
     const splittedWord = word.trim('\t').split('\t');
     const origin = splittedWord[0];
     const hiragana = isKana(splittedWord[1]) ? toHiragana(splittedWord[1], {passRomaji: true}) : splittedWord[1];
@@ -99,7 +105,7 @@ const parseChasen = (text: string, mecabCommand: string) => {
   }
   const pairs = []
   for (const word of splittedSentences) {
-    if (word === "EOS") break;
+    if (word === "EOS") continue;
     const splittedWord = word.trim('\t').split('\t');
     const origin = splittedWord[0];
     const hiragana = isKana(splittedWord[1]) ? toHiragana(splittedWord[1], {passRomaji: true}) : splittedWord[1];
@@ -119,7 +125,7 @@ const parseEmpty = (text: string, mecabCommand: string) => {
   }
   const pairs = []
   for (const word of splittedSentences) {
-    if (word === "EOS") break;
+    if (word === "EOS") continue;
     const splittedFeature = word.trim('\t').split('\t');
     const origin = splittedFeature[0];
     const splittedWord = splittedFeature[1].split(',');
