@@ -23,6 +23,7 @@ function createStoredObject(textMain: string, textHiragana: string) {
 
 function splitOkuriganaCompact(text: string, hiragana: string): any {
   if (typeof hiragana === 'undefined') hiragana = text
+  else if (hiragana === '*') hiragana = toHiragana(text)
   const kanjiPointer = [text.length, -1];
   const stored = []
   for (let i = 0; i < text.length + 1; i++) {
