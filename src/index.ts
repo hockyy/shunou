@@ -113,15 +113,12 @@ const parseEmpty = (text: string, mecabCommand: string) => {
   if (splittedSentences.length === 0 || !ok) {
     return notOKParseResponse
   }
-  console.log(splittedSentences)
   const pairs = []
   for (const word of splittedSentences) {
     if (word === "EOS") break;
     const splittedFeature = word.trim('\t').split('\t');
-    console.log(splittedFeature)
     const origin = splittedFeature[0];
     const splittedWord = splittedFeature[1].split(',');
-    console.log(splittedWord)
     const hiragana = isKana(splittedWord[5]) ? toHiragana(splittedWord[5], {passRomaji: true}) : splittedWord[5];
     const basicForm = splittedWord[4]
     const pos = splittedWord[0]
