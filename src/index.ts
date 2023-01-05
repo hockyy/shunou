@@ -51,12 +51,29 @@ function splitOkuriganaCompact(text: string, hiragana: string): any {
   return stored;
 }
 
-function getFurigana(text: string, mecabCommand: string = 'mecab') {
-  const sentences = spawnSync(mecabCommand, {input: text, shell: true}).stdout.toString();
-  const pairs = [];
-  for (const word of sentences.split('\n')) {
-    if (word === 'EOS') continue;
-    const splittedWord = word.split('\t');
+const notOKRunAndSplitResponse = {ok: false, splittedSentences: []};
+const runAndSplit = (text: string, mecabCommand: string, outputFormat: string) => {
+  let sentences = spawnSync(mecabCommand, outputFormat !== '' ? ['-O', outputFormat] : [], {
+    input: text,
+    shell: true
+  }).stdout.toString();
+  const splittedSentences = sentences.split('\n');
+  if (splittedSentences.length === 1 && splittedSentences.includes(`unkown format type [${outputFormat}]`)) {
+    return notOKRunAndSplitResponse;
+  }
+  return {ok: true, splittedSentences};
+}
+
+const notOKParseResponse = {ok: false, pairs: []};
+const parseChamame = (text: string, mecabCommand: string) => {
+  const {ok, splittedSentences} = runAndSplit(text, mecabCommand, 'chamame');
+  if (splittedSentences.length === 0 || !ok || splittedSentences[0][0] !== 'B') {
+    return notOKParseResponse
+  }
+  const pairs = []
+  splittedSentences[0] = splittedSentences[0].substring(1)
+  for (const word of splittedSentences) {
+    const splittedWord = word.trim('\t').split('\t');
     const origin = splittedWord[0];
     const hiragana = isKana(splittedWord[1]) ? toHiragana(splittedWord[1], {passRomaji: true}) : splittedWord[1];
     const basicForm = splittedWord[3]
@@ -65,8 +82,60 @@ function getFurigana(text: string, mecabCommand: string = 'mecab') {
       origin, hiragana, basicForm, pos
     })
   }
+  return {ok: true, pairs}
+}
+
+const parseChasen = (text: string, mecabCommand: string) => {
+  const {ok, splittedSentences} = runAndSplit(text, mecabCommand, 'chasen');
+  if (splittedSentences.length === 0 || !ok || splittedSentences[0][0] !== 'B') {
+    return notOKParseResponse
+  }
+  const pairs = []
+  splittedSentences[0] = splittedSentences[0].substring(1)
+  for (const word of splittedSentences) {
+    const splittedWord = word.trim('\t').split('\t');
+    const origin = splittedWord[0];
+    const hiragana = isKana(splittedWord[1]) ? toHiragana(splittedWord[1], {passRomaji: true}) : splittedWord[1];
+    const basicForm = splittedWord[3]
+    const pos = splittedWord[4]
+    pairs.push({
+      origin, hiragana, basicForm, pos
+    })
+  }
+  return {ok: true, pairs}
+}
+
+
+const parseEmpty = (text: string, mecabCommand: string) => {
+  const {ok, splittedSentences} = runAndSplit(text, mecabCommand, '');
+  if (splittedSentences.length === 0 || !ok || splittedSentences[0][0] !== 'B') {
+    return notOKParseResponse
+  }
+  const pairs = []
+  splittedSentences[0] = splittedSentences[0].substring(1)
+  for (const word of splittedSentences) {
+    const splittedWord = word.trim('\t').split('\t');
+    const origin = splittedWord[0];
+    const hiragana = isKana(splittedWord[1]) ? toHiragana(splittedWord[1], {passRomaji: true}) : splittedWord[1];
+    const basicForm = splittedWord[3]
+    const pos = splittedWord[4]
+    pairs.push({
+      origin, hiragana, basicForm, pos
+    })
+  }
+  return {ok: true, pairs}
+}
+
+function getFurigana(text: string, mecabCommand: string = 'mecab') {
+  let res = parseChamame(text, mecabCommand)
+  if (!res.ok) {
+    res = parseChasen(text, mecabCommand)
+    if (!res.ok) {
+      res = parseEmpty(text, mecabCommand)
+    }
+  }
   const ret = []
-  for (const wordPair of pairs) {
+  for (const wordPair of res.pairs) {
     ret.push({
       ...wordPair,
       separation: splitOkuriganaCompact(wordPair.origin, wordPair.hiragana)
