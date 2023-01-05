@@ -58,8 +58,11 @@ const runAndSplit = (text: string, mecabCommand: string, outputFormat: string) =
     shell: true
   }).stdout.toString();
   const splittedSentences = sentences.split('\n');
-  if (splittedSentences.length === 1 && splittedSentences.includes(`unkown format type [${outputFormat}]`)) {
+  if (splittedSentences.length === 0 || splittedSentences[0].includes(`unkown format type [${outputFormat}]`)) {
     return notOKRunAndSplitResponse;
+  }
+  while (splittedSentences.length > 0 && splittedSentences[splittedSentences.length - 1] === '') {
+    splittedSentences.pop()
   }
   return {ok: true, splittedSentences};
 }
@@ -87,17 +90,17 @@ const parseChamame = (text: string, mecabCommand: string) => {
 
 const parseChasen = (text: string, mecabCommand: string) => {
   const {ok, splittedSentences} = runAndSplit(text, mecabCommand, 'chasen');
-  if (splittedSentences.length === 0 || !ok || splittedSentences[0][0] !== 'B') {
+  if (splittedSentences.length === 0 || !ok) {
     return notOKParseResponse
   }
   const pairs = []
-  splittedSentences[0] = splittedSentences[0].substring(1)
   for (const word of splittedSentences) {
+    if (word === "EOS") break;
     const splittedWord = word.trim('\t').split('\t');
     const origin = splittedWord[0];
     const hiragana = isKana(splittedWord[1]) ? toHiragana(splittedWord[1], {passRomaji: true}) : splittedWord[1];
-    const basicForm = splittedWord[3]
-    const pos = splittedWord[4]
+    const basicForm = splittedWord[2]
+    const pos = splittedWord[3]
     pairs.push({
       origin, hiragana, basicForm, pos
     })
@@ -105,20 +108,23 @@ const parseChasen = (text: string, mecabCommand: string) => {
   return {ok: true, pairs}
 }
 
-
 const parseEmpty = (text: string, mecabCommand: string) => {
   const {ok, splittedSentences} = runAndSplit(text, mecabCommand, '');
-  if (splittedSentences.length === 0 || !ok || splittedSentences[0][0] !== 'B') {
+  if (splittedSentences.length === 0 || !ok) {
     return notOKParseResponse
   }
+  console.log(splittedSentences)
   const pairs = []
-  splittedSentences[0] = splittedSentences[0].substring(1)
   for (const word of splittedSentences) {
-    const splittedWord = word.trim('\t').split('\t');
-    const origin = splittedWord[0];
-    const hiragana = isKana(splittedWord[1]) ? toHiragana(splittedWord[1], {passRomaji: true}) : splittedWord[1];
-    const basicForm = splittedWord[3]
-    const pos = splittedWord[4]
+    if (word === "EOS") break;
+    const splittedFeature = word.trim('\t').split('\t');
+    console.log(splittedFeature)
+    const origin = splittedFeature[0];
+    const splittedWord = splittedFeature[1].split(',');
+    console.log(splittedWord)
+    const hiragana = isKana(splittedWord[5]) ? toHiragana(splittedWord[5], {passRomaji: true}) : splittedWord[5];
+    const basicForm = splittedWord[4]
+    const pos = splittedWord[0]
     pairs.push({
       origin, hiragana, basicForm, pos
     })
