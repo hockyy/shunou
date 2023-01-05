@@ -53,6 +53,7 @@ function splitOkuriganaCompact(text: string, hiragana: string): any {
 
 const notOKRunAndSplitResponse = {ok: false, splittedSentences: []};
 const runAndSplit = (text: string, mecabCommand: string, outputFormat: string) => {
+  text = text.replace('\r', '')
   let sentences = spawnSync(mecabCommand, outputFormat !== '' ? ['-O', outputFormat] : [], {
     input: text,
     shell: true
