@@ -1,6 +1,7 @@
 import * as wanakana from 'wanakana';
 import {isKana, isKanji, isMixed, toHiragana, toRomaji} from 'wanakana';
 import {spawnSync} from "child_process";
+import {escape} from "querystring";
 
 function anyOneTrue(word: string, func) {
   for (const ch of word) {
@@ -21,6 +22,8 @@ function createStoredObject(textMain: string, textHiragana: string) {
 }
 
 function splitOkuriganaCompact(text: string, hiragana: string): any {
+  if (typeof hiragana === 'undefined') hiragana = text
+  console.log(text, hiragana)
   const kanjiPointer = [text.length, -1];
   const stored = []
   for (let i = 0; i < text.length + 1; i++) {
@@ -53,7 +56,7 @@ function splitOkuriganaCompact(text: string, hiragana: string): any {
 
 const notOKRunAndSplitResponse = {ok: false, splittedSentences: []};
 const runAndSplit = (text: string, mecabCommand: string, outputFormat: string) => {
-  text = text.replace(/\r/g, '')
+  // text = text.replace(/\r/g, '')
   let sentences = spawnSync(mecabCommand, outputFormat !== '' ? ['-O', outputFormat] : [], {
     input: text,
     shell: true
