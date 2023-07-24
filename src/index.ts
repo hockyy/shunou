@@ -158,6 +158,22 @@ export interface ShunouWordWithSeparations extends ShunouWord {
     separation: ShunouSeparation[];
 }
 
+export interface KuromojinWord {
+    word_id: number;
+    word_type: string;
+    word_position: number;
+    surface_form: string;
+    pos: string;
+    pos_detail_1: string;
+    pos_detail_2: string;
+    pos_detail_3: string;
+    conjugated_type: string;
+    conjugated_form: string;
+    basic_form: string;
+    reading: string;
+    pronunciation: string;
+}
+
 export function separate(pairs: ShunouWord[]) {
 
     const ret: ShunouWordWithSeparations[] = []
@@ -185,34 +201,25 @@ function isMixedJapanese(text: string): boolean {
     return isMixed(text)
 }
 
-export function kuromojinToShunou(texts: any[]) {
+export function kuromojinToShunou(texts: KuromojinWord[]): ShunouWord[] {
     return texts.map(item => {
         const origin = item.surface_form;
-        const hiragana = item.reading; // Need to convert to hiragana if it's not
+        const hiragana = toHiragana(item.pronunciation); // Need to convert to hiragana if it's not
         const basicForm = item.basic_form;
-        const pos = item.pos + (item.pos_detail_1 !== '*' ? '-' + item.pos_detail_1 : '');
-
-        // The following part assumes there is always one separation and each char is separate
-        const separation = origin.split('').map(char => {
-            const origin = item.surface_form;
-            const hiragana = item.reading; // Need to convert to hiragana if it's not
-            const basicForm = item.basic_form;
-            const pos = item.pos + (item.pos_detail_1 !== '*' ? '-' + item.pos_detail_1 : '');
-
-            return {
-                origin,
-                hiragana,
-                basicForm,
-                pos
-            };
-        });
-
+        const pos = item.pos
+            + (item.pos_detail_1 !== '*' ? '-' + item.pos_detail_1 : '')
+            + (item.pos_detail_2 !== '*' ? '-' + item.pos_detail_2 : '')
+            + (item.pos_detail_3 !== '*' ? '-' + item.pos_detail_3 : '');
         return {
             origin,
             hiragana,
             basicForm,
-            pos,
-            separation,
+            pos
         };
     });
+}
+
+export function processKuromojinToSeparations(texts: KuromojinWord[]): ShunouWordWithSeparations[] {
+    const shunouTexts = kuromojinToShunou(texts);
+    return separate(shunouTexts);
 }
