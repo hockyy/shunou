@@ -1,6 +1,6 @@
 {
   "name": "shunou",
-  "version": "1.0.00",
+  "version": "1.0.01",
   "description": "",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",

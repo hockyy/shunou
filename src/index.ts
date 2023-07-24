@@ -138,14 +138,14 @@ const parseEmpty = (text: string, mecabCommand: string) => {
     return {ok: true, pairs}
 }
 
-interface ShunouWord {
+export interface ShunouWord {
     origin: string;
     hiragana: string;
     basicForm: string;
     pos: string;
 }
 
-interface ShunouSeparation {
+export interface ShunouSeparation {
     main: string;
     hiragana: string;
     romaji: string;
@@ -154,11 +154,11 @@ interface ShunouSeparation {
     isMixed: boolean;
 }
 
-interface ShunouWordWithSeparations extends ShunouWord {
+export interface ShunouWordWithSeparations extends ShunouWord {
     separation: ShunouSeparation[];
 }
 
-function separate(pairs: ShunouWord[]) {
+export function separate(pairs: ShunouWord[]) {
 
     const ret: ShunouWordWithSeparations[] = []
     for (const wordPair of pairs) {
@@ -170,7 +170,7 @@ function separate(pairs: ShunouWord[]) {
     return ret
 }
 
-function getFurigana(text: string, mecabCommand: string = 'mecab'): ShunouWordWithSeparations[] {
+export function getFurigana(text: string, mecabCommand: string = 'mecab'): ShunouWordWithSeparations[] {
     let res: { ok: boolean, pairs: ShunouWord[] } = parseChamame(text, mecabCommand)
     if (!res.ok) {
         res = parseChasen(text, mecabCommand)
@@ -184,5 +184,3 @@ function getFurigana(text: string, mecabCommand: string = 'mecab'): ShunouWordWi
 function isMixedJapanese(text: string): boolean {
     return isMixed(text)
 }
-
-export {getFurigana, isMixedJapanese};
