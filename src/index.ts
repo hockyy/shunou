@@ -1,7 +1,5 @@
-import * as wanakana from 'wanakana';
 import {isKana, isKanji, isMixed, toHiragana, toRomaji} from 'wanakana';
 import {spawnSync} from "child_process";
-import {escape} from "querystring";
 
 function anyOneTrue(word: string, func) {
     for (const ch of word) {
@@ -140,22 +138,47 @@ const parseEmpty = (text: string, mecabCommand: string) => {
     return {ok: true, pairs}
 }
 
-function getFurigana(text: string, mecabCommand: string = 'mecab') {
-    let res = parseChamame(text, mecabCommand)
-    if (!res.ok) {
-        res = parseChasen(text, mecabCommand)
-        if (!res.ok) {
-            res = parseEmpty(text, mecabCommand)
-        }
-    }
-    const ret = []
-    for (const wordPair of res.pairs) {
+interface ShunouWord {
+    origin: string;
+    hiragana: string;
+    basicForm: string;
+    pos: string;
+}
+
+interface ShunouSeparation {
+    main: string;
+    hiragana: string;
+    romaji: string;
+    isKana: boolean;
+    isKanji: boolean;
+    isMixed: boolean;
+}
+
+interface ShunouWordWithSeparations extends ShunouWord {
+    separation: ShunouSeparation[];
+}
+
+function separate(pairs: ShunouWord[]) {
+
+    const ret: ShunouWordWithSeparations[] = []
+    for (const wordPair of pairs) {
         ret.push({
             ...wordPair,
             separation: splitOkuriganaCompact(wordPair.origin, wordPair.hiragana)
         });
     }
     return ret
+}
+
+function getFurigana(text: string, mecabCommand: string = 'mecab'): ShunouWordWithSeparations[] {
+    let res: { ok: boolean, pairs: ShunouWord[] } = parseChamame(text, mecabCommand)
+    if (!res.ok) {
+        res = parseChasen(text, mecabCommand)
+        if (!res.ok) {
+            res = parseEmpty(text, mecabCommand)
+        }
+    }
+    return separate(res.pairs);
 }
 
 function isMixedJapanese(text: string): boolean {
