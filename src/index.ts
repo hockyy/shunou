@@ -184,3 +184,35 @@ export function getFurigana(text: string, mecabCommand: string = 'mecab'): Shuno
 function isMixedJapanese(text: string): boolean {
     return isMixed(text)
 }
+
+export function kuromojinToShunou(texts: any[]) {
+    return texts.map(item => {
+        const origin = item.surface_form;
+        const hiragana = item.reading; // Need to convert to hiragana if it's not
+        const basicForm = item.basic_form;
+        const pos = item.pos + (item.pos_detail_1 !== '*' ? '-' + item.pos_detail_1 : '');
+
+        // The following part assumes there is always one separation and each char is separate
+        const separation = origin.split('').map(char => {
+            const origin = item.surface_form;
+            const hiragana = item.reading; // Need to convert to hiragana if it's not
+            const basicForm = item.basic_form;
+            const pos = item.pos + (item.pos_detail_1 !== '*' ? '-' + item.pos_detail_1 : '');
+
+            return {
+                origin,
+                hiragana,
+                basicForm,
+                pos
+            };
+        });
+
+        return {
+            origin,
+            hiragana,
+            basicForm,
+            pos,
+            separation,
+        };
+    });
+}
